@@ -1,0 +1,289 @@
+import tkinter as tk
+from tkinter import ttk, messagebox
+from engine import update_profile_key
+
+class ConfigPanel:
+    def __init__(self, parent, app=None):
+        self.parent = parent
+        self.app = app  # Reference to main app
+        self.create_ui()
+
+    def create_ui(self):
+        """Create the key changer panel."""
+        config_frame = tk.Frame(self.parent, bg="gray25", bd=2, relief="ridge")
+        config_frame.place(x=570, y=70, width=300, height=400)
+
+        tk.Label(config_frame, text="Key Changer Panel", bg="gray25", fg="white", font=("Arial", 14, "bold"), pady=5).pack()
+
+        self.tab_control = ttk.Notebook(config_frame)  # Save as instance variable
+        self.tab_control.pack(expand=1, fill="both")
+
+        # Tab for Basic Configuration
+        basic_tab = tk.Frame(self.tab_control, bg="gray20")
+        self.tab_control.add(basic_tab, text="Basic Config")
+
+        # Name Input Box at the top
+        self.text_box_label = tk.Label(basic_tab, text="Name(Use):", bg="gray20", fg="white", font=("Arial", 12))
+        self.text_box_label.pack(pady=5)
+
+        self.text_box = tk.Text(basic_tab, height=1.2, width=30, wrap="word", bg="gray30", fg="white", font=("Arial", 10))
+        self.text_box.pack(pady=5)
+
+        # Category Dropdown (First Dropdown)
+        tk.Label(basic_tab, text="Select Category", bg="gray20", fg="white", font=("Arial", 12)).pack(pady=5)
+        self.key_category_var = tk.StringVar()
+        self.key_category_var.set("Alphabets")  # Default Category
+
+        category_dropdown = ttk.Combobox(basic_tab, textvariable=self.key_category_var, state="readonly")
+        category_dropdown["values"] = ["Alphabets", "Numbers", "Symbols", "F1-F24", "Navigation Keys", 
+                                       "Modifiers", "System Keys", "Media Keys", "Numpad Keys", "Other Keys"]
+        category_dropdown.pack(pady=5)
+        
+        # Specific Keys Dropdown (Second Dropdown)
+        tk.Label(basic_tab, text="Select Key", bg="gray20", fg="white", font=("Arial", 12)).pack(pady=5)
+        self.specific_keys_var = tk.StringVar()
+        self.specific_keys_dropdown = ttk.Combobox(basic_tab, textvariable=self.specific_keys_var, state="readonly")
+        self.specific_keys_dropdown.pack(pady=5)
+
+        # Update the second dropdown based on the selected category
+        self.update_specific_keys()
+        category_dropdown.bind("<<ComboboxSelected>>", self.update_specific_keys)
+
+        # Save Button
+        save_button = tk.Button(basic_tab, text="Save", bg="blue", fg="white", font=("Arial", 12), command=self.save_config)
+        save_button.pack(pady=10)
+
+        # Tab for Advanced Configuration
+        advanced_tab = tk.Frame(self.tab_control, bg="gray20")
+        self.tab_control.add(advanced_tab, text="Advanced")
+
+        # Name input box at the top
+        self.advanced_text_label = tk.Label(advanced_tab, text="Name(Use):", bg="gray20", fg="white", font=("Arial", 12))
+        self.advanced_text_label.pack(pady=5)
+
+        self.advanced_text_box = tk.Text(advanced_tab, height=1.2, width=30, wrap="word", bg="gray30", fg="white", font=("Arial", 10))
+        self.advanced_text_box.pack(pady=10)
+
+        # Radio buttons for key combination options
+        self.key_combo_var = tk.IntVar(value=2)
+        radio_frame = tk.Frame(advanced_tab, bg="gray20")
+        radio_frame.pack(pady=5)
+        
+        tk.Radiobutton(radio_frame, text="2 Keys", variable=self.key_combo_var, value=2, 
+                      bg="gray20", fg="white", selectcolor="gray30", 
+                      command=self.update_key_dropdowns).pack(side="left", padx=20)
+        tk.Radiobutton(radio_frame, text="3 Keys", variable=self.key_combo_var, value=3, 
+                      bg="gray20", fg="white", selectcolor="gray30",
+                      command=self.update_key_dropdowns).pack(side="left", padx=20)
+
+        # Frame for Dropdowns
+        self.dropdown_frame = tk.Frame(advanced_tab, bg="gray20")
+        self.dropdown_frame.pack(pady=10)
+
+        # First modifier dropdown
+        self.first_modifier_label = tk.Label(self.dropdown_frame, text="First Modifier:", bg="gray20", fg="white")
+        self.first_modifier_var = tk.StringVar(value="None")
+        self.modifier_dropdown_1 = ttk.Combobox(
+            self.dropdown_frame, textvariable=self.first_modifier_var, state="readonly",
+            values=["None", "Ctrl", "Alt", "Shift"]
+        )
+
+        # Second modifier dropdown (can't match first)
+        self.second_modifier_label = tk.Label(self.dropdown_frame, text="Second Modifier:", bg="gray20", fg="white")
+        self.second_modifier_var = tk.StringVar(value="None")
+        self.modifier_dropdown_2 = ttk.Combobox(
+            self.dropdown_frame, textvariable=self.second_modifier_var, state="readonly",
+            values=["None", "Ctrl", "Alt", "Shift"]
+        )
+
+        # Third dropdown (all keys)
+        self.third_key_label = tk.Label(self.dropdown_frame, text="Key:", bg="gray20", fg="white")
+        self.third_key_var = tk.StringVar()
+        all_keys = (
+            [chr(i) for i in range(65, 91)] +  # A-Z
+            [str(i) for i in range(10)] +      # 0-9
+            ["!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "_", "+", "-", "=", "{",
+             "}", "[", "]", "|", "\\", ":", ";", '"', "'", "<", ">", ",", ".", "?", "/"] +
+            [f"F{i}" for i in range(1, 25)] +  # F1-F24
+            ["Up", "Down", "Left", "Right", "Home", "End", "Page Up", "Page Down"] +  # Navigation
+            ["Shift", "Ctrl", "Alt", "Caps Lock", "Tab"] +  # Modifiers
+            ["Insert", "Delete", "Print Screen", "Scroll Lock", "Pause/Break"] +  # System Keys
+            ["Volume Up", "Volume Down", "Mute", "Play/Pause", "Stop", "Next Track", "Previous Track"] +  # Media Keys
+            ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"] +  # Numpad Numbers
+            ["+", "-", "*", "/", "Enter", "Decimal"] +  # Numpad Operators
+            ["Escape", "Space", "Backspace"] +  # Other Keys
+            ["Windows Key"]  # Add more keys as needed
+        )
+        self.third_dropdown = ttk.Combobox(
+            self.dropdown_frame, textvariable=self.third_key_var, state="readonly",
+            values=all_keys
+        )
+
+        self.modifier_dropdown_1.bind("<<ComboboxSelected>>", self.sync_modifiers)
+        self.modifier_dropdown_2.bind("<<ComboboxSelected>>", self.sync_modifiers)
+
+        # Initialize dropdowns based on default radio selection
+        self.update_key_dropdowns()
+
+        # Save Button
+        advanced_save_button = tk.Button(advanced_tab, text="Save", bg="blue", fg="white", font=("Arial", 12), command=self.save_config)
+        advanced_save_button.pack(pady=10)
+
+    def update_specific_keys(self, event=None):
+        """Update the specific keys dropdown based on the selected category."""
+        category = self.key_category_var.get()
+        if category == "Alphabets":
+            keys = [chr(i) for i in range(65, 91)]  # A-Z
+        elif category == "Numbers":
+            keys = [str(i) for i in range(10)]
+        elif category == "Symbols":
+            keys = ["!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "_", "+", "-", "=", "{", 
+                   "}", "[", "]", "|", "\\", ":", ";", '"', "'", "<", ">", ",", ".", "?", "/"]
+        elif category == "F1-F24":
+            keys = [f"F{i}" for i in range(1, 25)]
+        elif category == "Navigation Keys":
+            keys = ["Up", "Down", "Left", "Right", "Home", "End", "Page Up", "Page Down"]
+        elif category == "Modifiers":
+            keys = ["Shift", "Ctrl", "Alt", "Caps Lock", "Tab"]
+        elif category == "System Keys":
+            keys = ["Insert", "Delete", "Print Screen", "Scroll Lock", "Pause/Break"]
+        elif category == "Media Keys":
+            keys = ["Volume Up", "Volume Down", "Mute", "Play/Pause", "Stop", "Next Track", "Previous Track"]
+        elif category == "Numpad Keys":
+            keys = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "+", "-", "*", "/", "Enter", "Decimal"]
+        elif category == "Other Keys":
+            keys = ["Escape", "Space", "Backspace", "Windows Key"]
+        else:
+            keys = []
+        self.specific_keys_dropdown["values"] = keys
+        if keys:
+            self.specific_keys_var.set(keys[0])
+        else:
+            self.specific_keys_var.set("")
+
+    def save_config(self):
+        """Collect user input and update the key configuration."""
+        # Get the currently selected profile and key
+        if not hasattr(self.app, 'selected_profile') or not hasattr(self.app, 'selected_key'):
+            messagebox.showwarning("Selection Required", "Please select a profile and key first.")
+            return
+            
+        profile_index = self.app.selected_profile
+        key_index = self.app.selected_key
+        
+        # Get configuration from the active tab
+        active_tab = self.tab_control.index("current")  # Get the current tab index
+        
+        if active_tab == 0:  # Basic tab
+            specific_key = self.specific_keys_var.get()
+            name = self.text_box.get("1.0", "end-1c").strip()
+            key_combination = [specific_key.lower()]
+        else:  # Advanced tab
+            num_keys = self.key_combo_var.get()
+            name = self.advanced_text_box.get("1.0", "end-1c").strip()
+            
+            if num_keys == 2:
+                # 2-key combination
+                modifiers = []
+                if self.first_modifier_var.get() != "None":
+                    modifiers.append(self.first_modifier_var.get().lower())
+                    
+                main_key = self.third_key_var.get().lower()
+                key_combination = modifiers + [main_key]
+            else:
+                # 3-key combination
+                modifiers = []
+                if self.first_modifier_var.get() != "None":
+                    modifiers.append(self.first_modifier_var.get().lower())
+                if self.second_modifier_var.get() != "None":
+                    modifiers.append(self.second_modifier_var.get().lower())
+                    
+                main_key = self.third_key_var.get().lower()
+                key_combination = modifiers + [main_key]
+        
+        # Update the key configuration
+        if update_profile_key(profile_index, key_index, key_combination, name):
+            messagebox.showinfo("Success", f"Key {key_index} updated in profile {profile_index}")
+            
+            # Update UI to show the new configuration
+            if hasattr(self.app, 'refresh_keypad'):
+                self.app.refresh_keypad()
+        else:
+            messagebox.showerror("Error", "Failed to update key configuration")
+
+    def get_selected_profile(self):
+        """
+        Return the selected profile index. 
+        Update mapping as needed for your profile buttons.
+        """
+        # Example mapping of profile names to indices based on your keyout.py
+        profile_map = {
+            "Default": 0,
+            "Photoshop": 5,   # Adjust if needed
+            "Pre Pro": 2,     # ...
+            "Blender": 3,
+            "Custom-1": 4,
+            "Custom-2": 1
+        }
+        # Currently hardcoded to "Default" or you could store the selected profile from ProfilesSection
+        return profile_map.get("Default", 0)
+
+    def sync_modifiers(self, event=None):
+        """Sample logic for sync. Not strictly required unless you're handling advanced combos."""
+        first = self.first_modifier_var.get()
+        second = self.second_modifier_var.get()
+        options = ["None", "Ctrl", "Alt", "Shift"]
+        if first != "None" and second == first:
+            self.second_modifier_var.set("None")
+        second_options = options.copy()
+        if first != "None" and first in second_options:
+            second_options.remove(first)
+        self.modifier_dropdown_2["values"] = second_options
+
+        first_options = options.copy()
+        if second != "None" and second in first_options:
+            first_options.remove(second)
+        self.modifier_dropdown_1["values"] = first_options
+
+    def update_key_dropdowns(self):
+        """Update the dropdown configuration based on radio button selection"""
+        num_keys = self.key_combo_var.get()
+        
+        # Reset all dropdowns
+        for widget in self.dropdown_frame.winfo_children():
+            widget.pack_forget()
+        
+        if num_keys == 2:
+            # Show only 2 dropdowns (first modifier and main key)
+            self.first_modifier_var.set("None")
+            self.second_modifier_var.set("None")
+            
+            # First key (modifier)
+            self.first_modifier_label.pack(pady=(5,0))
+            self.modifier_dropdown_1.pack(pady=(0,5))
+            
+            # Second key (main key)
+            self.third_key_label.pack(pady=(5,0))
+            self.third_dropdown.pack(pady=(0,5))
+            
+        else:  # num_keys == 3
+            # Show all 3 dropdowns
+            self.first_modifier_var.set("None")
+            self.second_modifier_var.set("None")
+            
+            # First modifier
+            self.first_modifier_label.pack(pady=(5,0))
+            self.modifier_dropdown_1.pack(pady=(0,5))
+            
+            # Second modifier
+            self.second_modifier_label.pack(pady=(5,0))
+            self.modifier_dropdown_2.pack(pady=(0,5))
+            
+            # Main key
+            self.third_key_label.pack(pady=(5,0))
+            self.third_dropdown.pack(pady=(0,5))
+
+if __name__ == "__main__":
+    root = tk.Tk()
+    app = ConfigPanel(root)
+    root.mainloop()

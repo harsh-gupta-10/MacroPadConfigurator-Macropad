@@ -10,7 +10,7 @@ class MacroPadConfigurator:
     def __init__(self, root):
         self.root = root
         self.root.title("MacroPad Configurator")
-        self.root.geometry("900x600")
+        self.root.geometry("900x500")
         self.root.configure(bg="black")
         
         # Track selected profile and key
@@ -19,12 +19,14 @@ class MacroPadConfigurator:
         
         # Create UI layout
         self.create_ui()
+        
+        # Set up window close event
+        self.root.protocol("WM_DELETE_WINDOW", self.on_close)
 
     def create_ui(self):
         """Create the main UI layout."""
         # Top Options Section
        
-
         # Profiles section
         self.profiles_section = ProfilesSection(self.root, self)
 
@@ -35,7 +37,14 @@ class MacroPadConfigurator:
         self.config_panel = ConfigPanel(self.root, self)
 
         # Status Bar
-        self.status_bar = StatusBar(self.root)
+        self.status_bar = StatusBar(self.root, self)
+    
+    def on_close(self):
+        """Handle window close event."""
+        # Stop status bar thread
+        self.status_bar.stop()
+        # Close the window
+        self.root.destroy()
         
     def set_selected_profile(self, profile_index):
         """Set the currently selected profile."""

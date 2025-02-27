@@ -30,7 +30,7 @@ class KeypadSection:
         for i in range(9):
             key_num = str(i + 1)
             btn = tk.Button(self.keypad_frame, text=f"Key {key_num}", bg="gray30", fg="white", relief="raised",
-                        font=("Arial", 10, "bold"), activebackground="red", activeforeground="white",
+                        font=("Arial", 8, "bold"), activebackground="red", activeforeground="white",
                         command=lambda k=key_num: self.configure_key(k),
                         width=10, height=3)
             btn.grid(row=(i // 3) + 1, column=i % 3, padx=10, pady=10)

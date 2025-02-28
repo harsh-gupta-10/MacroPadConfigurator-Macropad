@@ -46,7 +46,7 @@ def get_json_path():
             base_dir = os.path.dirname(__file__)
         return os.path.join(base_dir, "keysfile.json")
 
-def update_profile_key(profile_index, key_index, new_keys, name=None):
+def update_profile_key(profile_index, key_index, new_keys, name=None, extra_data=None):
     """
     Update a specific key in a profile within keysfile.json
     
@@ -55,6 +55,7 @@ def update_profile_key(profile_index, key_index, new_keys, name=None):
         key_index: The key number as string (e.g., "1", "2", etc)
         new_keys: List of key combinations (e.g., ["ctrl", "s"])
         name: Optional name for the shortcut
+        extra_data: Dictionary of additional data (e.g., {"software": "notepad"})
     """
     keysfile_path = get_json_path()
     try:
@@ -81,6 +82,11 @@ def update_profile_key(profile_index, key_index, new_keys, name=None):
         # Update the name if provided
         if name:
             data["profiles"][profile_str][key_str]["name"] = name
+            
+        # Add any extra data fields
+        if extra_data:
+            for key, value in extra_data.items():
+                data["profiles"][profile_str][key_str][key] = value
             
         # Save the updated JSON
         with open(keysfile_path, 'w', encoding='utf-8') as f:

@@ -1,6 +1,7 @@
 import tkinter as tk
-from tkinter import ttk, messagebox
+from tkinter import ttk, messagebox, filedialog
 from engine import update_profile_key
+import os
 
 class ConfigPanel:
     def __init__(self, parent, app=None):
@@ -85,7 +86,7 @@ class ConfigPanel:
         self.first_modifier_var = tk.StringVar(value="None")
         self.modifier_dropdown_1 = ttk.Combobox(
             self.dropdown_frame, textvariable=self.first_modifier_var, state="readonly",
-            values=["None", "Ctrl", "Alt", "Shift"]
+            values=["None", "Ctrl", "Alt", "Shift","windows"]
         )
 
         # Second modifier dropdown (can't match first)
@@ -93,7 +94,7 @@ class ConfigPanel:
         self.second_modifier_var = tk.StringVar(value="None")
         self.modifier_dropdown_2 = ttk.Combobox(
             self.dropdown_frame, textvariable=self.second_modifier_var, state="readonly",
-            values=["None", "Ctrl", "Alt", "Shift"]
+            values=["None", "Ctrl", "Alt", "Shift","windows"]
         )
 
         # Third dropdown (all keys)
@@ -112,7 +113,7 @@ class ConfigPanel:
             ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"] +  # Numpad Numbers
             ["+", "-", "*", "/", "Enter", "Decimal"] +  # Numpad Operators
             ["Escape", "Space", "Backspace"] +  # Other Keys
-            ["Windows Key"]  # Add more keys as needed
+            ["windows"]  # Add more keys as needed
         )
         self.third_dropdown = ttk.Combobox(
             self.dropdown_frame, textvariable=self.third_key_var, state="readonly",
@@ -128,6 +129,76 @@ class ConfigPanel:
         # Save Button
         advanced_save_button = tk.Button(advanced_tab, text="Save", bg="blue", fg="white", font=("Arial", 12), command=self.save_config)
         advanced_save_button.pack(pady=10)
+
+        # Tab for Software Configuration
+        software_tab = tk.Frame(self.tab_control, bg="gray20")
+        self.tab_control.add(software_tab, text="Software")
+
+        # Name input box at the top
+        self.software_text_label = tk.Label(software_tab, text="Name(Use):", bg="gray20", fg="white", font=("Arial", 12))
+        self.software_text_label.pack(pady=5)
+
+        self.software_text_box = tk.Text(software_tab, height=1.2, width=30, wrap="word", bg="gray30", fg="white", font=("Arial", 10))
+        self.software_text_box.pack(pady=10)
+
+        # Software selection dropdown
+        tk.Label(software_tab, text="Select Software:", bg="gray20", fg="white", font=("Arial", 12)).pack(pady=5)
+        self.software_var = tk.StringVar(value="notepad")
+        common_software = [
+            "notepad", "mspaint", "calc", "explorer", 
+            "chrome", "firefox", "msedge", "vscode",
+            "word", "excel", "powerpoint", "outlook",
+            "discord", "spotify", "photoshop", "blender",
+            "steam", "obs", "vlc", "cmd"
+        ]
+        
+        self.software_dropdown = ttk.Combobox(software_tab, textvariable=self.software_var, state="readonly", values=common_software)
+        self.software_dropdown.pack(pady=5)
+        
+        # Custom software path option
+        custom_frame = tk.Frame(software_tab, bg="gray20")
+        custom_frame.pack(pady=10, fill="x", padx=20)
+        
+        tk.Label(custom_frame, text="Or Enter your Software name:", bg="gray20", fg="white").pack(anchor="w")
+        
+        path_frame = tk.Frame(custom_frame, bg="gray20")
+        path_frame.pack(fill="x", pady=5)
+        
+        self.custom_path_var = tk.StringVar()
+        self.custom_path_entry = tk.Entry(path_frame, textvariable=self.custom_path_var, bg="gray30", fg="white")
+        self.custom_path_entry.pack(side="left", expand=True, fill="x", padx=(0,5))
+        
+        
+        
+        # Modifier key option (for software launch with hotkey)
+        modifier_frame = tk.Frame(software_tab, bg="gray20")
+        modifier_frame.pack(pady=10)
+        
+        tk.Label(modifier_frame, text="Type:", bg="gray20", fg="white").pack(side="left", padx=5)
+        
+        self.software_modifier_var = tk.StringVar(value="Software")
+        ttk.Combobox(
+            modifier_frame, textvariable=self.software_modifier_var, state="readonly",
+            values=["Software"], width=10
+        ).pack(side="left", padx=5)
+        
+        # Save Button
+        software_save_button = tk.Button(software_tab, text="Save", bg="blue", fg="white", font=("Arial", 12), command=self.save_config)
+        software_save_button.pack(pady=10)
+
+    def browse_software(self):
+        """Open file dialog to browse for executable"""
+        file_path = filedialog.askopenfilename(
+            title="Select Application",
+            filetypes=[("Executable files", "*.exe"), ("All files", "*.*")]
+        )
+        if file_path:
+            self.custom_path_var.set(file_path)
+            # Also update the name if it's empty
+            if not self.software_text_box.get("1.0", "end-1c").strip():
+                app_name = os.path.splitext(os.path.basename(file_path))[0]
+                self.software_text_box.delete("1.0", "end")
+                self.software_text_box.insert("1.0", f"Open {app_name}")
 
     def update_specific_keys(self, event=None):
         """Update the specific keys dropdown based on the selected category."""
@@ -152,7 +223,7 @@ class ConfigPanel:
         elif category == "Numpad Keys":
             keys = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "+", "-", "*", "/", "Enter", "Decimal"]
         elif category == "Other Keys":
-            keys = ["Escape", "Space", "Backspace", "Windows Key"]
+            keys = ["Escape", "Space", "Backspace", "windows"]
         else:
             keys = []
         self.specific_keys_dropdown["values"] = keys
@@ -178,9 +249,11 @@ class ConfigPanel:
             specific_key = self.specific_keys_var.get()
             name = self.text_box.get("1.0", "end-1c").strip()
             key_combination = [specific_key.lower()]
-        else:  # Advanced tab
+            software = None
+        elif active_tab == 1:  # Advanced tab
             num_keys = self.key_combo_var.get()
             name = self.advanced_text_box.get("1.0", "end-1c").strip()
+            software = None
             
             if num_keys == 2:
                 # 2-key combination
@@ -200,9 +273,27 @@ class ConfigPanel:
                     
                 main_key = self.third_key_var.get().lower()
                 key_combination = modifiers + [main_key]
+        else:  # Software tab
+            name = self.software_text_box.get("1.0", "end-1c").strip()
+            # Use custom path if provided, otherwise use selected software
+            if self.custom_path_var.get().strip():
+                software = self.custom_path_var.get().strip()
+            else:
+                software = self.software_var.get()
+                
+            # Add modifier key if selected
+            if self.software_modifier_var.get() != "None":
+                key_combination = [self.software_modifier_var.get().lower()]
+            else:
+                key_combination = []
+        
+        # Create additional data for software
+        extra_data = {}
+        if software:
+            extra_data["software"] = software
         
         # Update the key configuration
-        if update_profile_key(profile_index, key_index, key_combination, name):
+        if update_profile_key(profile_index, key_index, key_combination, name, extra_data):
             messagebox.showinfo("Success", f"Key {key_index} updated in profile {profile_index}")
             
             # Update UI to show the new configuration
@@ -232,9 +323,11 @@ class ConfigPanel:
         """Sample logic for sync. Not strictly required unless you're handling advanced combos."""
         first = self.first_modifier_var.get()
         second = self.second_modifier_var.get()
-        options = ["None", "Ctrl", "Alt", "Shift"]
+        options = ["None", "Ctrl", "Alt", "Shift", "windows"]  # Added "windows" to the options
+        
         if first != "None" and second == first:
             self.second_modifier_var.set("None")
+        
         second_options = options.copy()
         if first != "None" and first in second_options:
             second_options.remove(first)

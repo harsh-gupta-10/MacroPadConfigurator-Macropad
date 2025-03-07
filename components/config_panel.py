@@ -245,15 +245,19 @@ class ConfigPanel:
         # Get configuration from the active tab
         active_tab = self.tab_control.index("current")  # Get the current tab index
         
+        # Initialize extra_data with software field explicitly set to None
+        # This ensures any previous software configuration is removed
+        extra_data = {"software": None}
+        
         if active_tab == 0:  # Basic tab
             specific_key = self.specific_keys_var.get()
             name = self.text_box.get("1.0", "end-1c").strip()
             key_combination = [specific_key.lower()]
-            software = None
+            # Using extra_data with software:None to remove any existing software configuration
         elif active_tab == 1:  # Advanced tab
             num_keys = self.key_combo_var.get()
             name = self.advanced_text_box.get("1.0", "end-1c").strip()
-            software = None
+            # Using extra_data with software:None to remove any existing software configuration
             
             if num_keys == 2:
                 # 2-key combination
@@ -286,10 +290,8 @@ class ConfigPanel:
                 key_combination = [self.software_modifier_var.get().lower()]
             else:
                 key_combination = []
-        
-        # Create additional data for software
-        extra_data = {}
-        if software:
+            
+            # For software tab, set the software field
             extra_data["software"] = software
         
         # Update the key configuration

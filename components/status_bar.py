@@ -5,6 +5,31 @@ import os
 import serial
 import serial.tools.list_ports
 
+# Import colors and ModernFrame if available
+try:
+    from main import COLORS, ModernFrame
+except ImportError:
+    # Fallback colors - modern dark theme
+    COLORS = {
+        "bg_dark": "#1E1E2E",     # Dark background
+        "bg_medium": "#2A2A3C",   # Medium background for frames
+        "bg_light": "#313244",    # Light background for elements
+        "accent": "#89B4FA",      # Blue accent color
+        "text": "#CDD6F4",        # Light text
+        "text_dim": "#A6ADC8",    # Dimmed text
+        "success": "#A6E3A1",     # Green for success
+        "warning": "#F9E2AF",     # Yellow for warnings
+        "error": "#F38BA8"        # Red for errors
+    }
+    
+    # Simple ModernFrame implementation
+    class ModernFrame(tk.Frame):
+        def __init__(self, parent, **kwargs):
+            self.corner_radius = kwargs.pop('corner_radius', 10)
+            self.padding = kwargs.pop('padding', 0)
+            super().__init__(parent, **kwargs)
+            self.interior = self
+
 class StatusBar:
     def __init__(self, root, app=None):
         self.root = root
@@ -12,21 +37,54 @@ class StatusBar:
         self.connected = False
         self.device_port = None
         self.stop_thread = False  # Flag to control the connection check thread
-
-        status_frame = tk.Frame(self.root, bg="gray15", bd=1, relief="sunken")
+        
+        # Create modern status bar with rounded corners
+        if 'ModernFrame' in globals():
+            status_frame = ModernFrame(
+                self.root, 
+                corner_radius=15, 
+                padding=5,
+                bg=COLORS["bg_medium"], 
+                highlightthickness=0
+            )
+        else:
+            status_frame = tk.Frame(
+                self.root, 
+                bg=COLORS["bg_medium"], 
+                bd=1, 
+                relief="ridge"
+            )
+        
         status_frame.place(x=10, y=460, width=880, height=40)
+        
+        # Get interior frame reference
+        interior = status_frame.interior if hasattr(status_frame, 'interior') else status_frame
 
         # Left frame for User Action status
-        self.user_action_frame = tk.Frame(status_frame, bg="gray15")
+        self.user_action_frame = tk.Frame(interior, bg=COLORS["bg_medium"])
         self.user_action_frame.pack(side="left", fill="both", expand=True)
-        self.user_action_label = tk.Label(self.user_action_frame, text="Status: Ready", bg="gray15", fg="yellow", font=("Arial", 10, "italic"))
-        self.user_action_label.pack(side="left", padx=10)
+        
+        self.user_action_label = tk.Label(
+            self.user_action_frame, 
+            text="Status: Ready", 
+            bg=COLORS["bg_medium"], 
+            fg=COLORS["warning"], 
+            font=("Segoe UI", 10)
+        )
+        self.user_action_label.pack(side="left", padx=15)
 
         # Right frame for Connection Status
-        self.connection_status_frame = tk.Frame(status_frame, bg="gray15")
+        self.connection_status_frame = tk.Frame(interior, bg=COLORS["bg_medium"])
         self.connection_status_frame.pack(side="right", fill="both", expand=True)
-        self.connection_status_label = tk.Label(self.connection_status_frame, text="Connection Status: Disconnected", bg="gray15", fg="red", font=("Arial", 10, "italic"))
-        self.connection_status_label.pack(side="right", padx=10)
+        
+        self.connection_status_label = tk.Label(
+            self.connection_status_frame, 
+            text="Connection Status: Disconnected", 
+            bg=COLORS["bg_medium"], 
+            fg=COLORS["error"], 
+            font=("Segoe UI", 10)
+        )
+        self.connection_status_label.pack(side="right", padx=15)
         
         # Start connection monitoring thread
         self.connection_thread = threading.Thread(target=self.check_connection_loop, daemon=True)
@@ -39,11 +97,17 @@ class StatusBar:
     def update_connection_status(self, connected, port=None):
         """Update the connection status display."""
         if connected:
-            self.connection_status_label.config(text=f"Connection Status: Connected ({port})", fg="green")
+            self.connection_status_label.config(
+                text=f"Connection Status: Connected ({port})", 
+                fg=COLORS["success"]
+            )
             self.connected = True
             self.device_port = port
         else:
-            self.connection_status_label.config(text="Connection Status: Disconnected", fg="red")
+            self.connection_status_label.config(
+                text="Connection Status: Disconnected", 
+                fg=COLORS["error"]
+            )
             self.connected = False
             self.device_port = None
     

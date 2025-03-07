@@ -75,6 +75,12 @@ def update_profile_key(profile_index, key_index, new_keys, name=None, extra_data
         if key_str not in data["profiles"][profile_str]:
             # Create new key entry if it doesn't exist
             data["profiles"][profile_str][key_str] = {"name": name or "Custom Shortcut", "key": []}
+        else:
+            # If key exists, keep only the basic fields to reset previous configuration
+            data["profiles"][profile_str][key_str] = {
+                "name": data["profiles"][profile_str][key_str].get("name", "Custom Shortcut"),
+                "key": data["profiles"][profile_str][key_str].get("key", [])
+            }
         
         # Update the key combination
         data["profiles"][profile_str][key_str]["key"] = new_keys
@@ -86,7 +92,13 @@ def update_profile_key(profile_index, key_index, new_keys, name=None, extra_data
         # Add any extra data fields
         if extra_data:
             for key, value in extra_data.items():
-                data["profiles"][profile_str][key_str][key] = value
+                if value is None:
+                    # If value is None, remove this field if it exists
+                    if key in data["profiles"][profile_str][key_str]:
+                        del data["profiles"][profile_str][key_str][key]
+                else:
+                    # Otherwise set or update the field
+                    data["profiles"][profile_str][key_str][key] = value
             
         # Save the updated JSON
         with open(keysfile_path, 'w', encoding='utf-8') as f:

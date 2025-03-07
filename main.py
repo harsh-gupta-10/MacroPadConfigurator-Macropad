@@ -40,7 +40,7 @@ class MacroPadConfigurator:
         self.status_bar = StatusBar(self.root, self)
     
     def on_close(self):
-        """Handle window close event."""
+        """Handle window close event.""" 
         # Stop status bar thread
         self.status_bar.stop()
         # Close the window

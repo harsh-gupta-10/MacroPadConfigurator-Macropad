@@ -186,6 +186,44 @@ class ConfigPanel:
         software_save_button = tk.Button(software_tab, text="Save", bg="blue", fg="white", font=("Arial", 12), command=self.save_config)
         software_save_button.pack(pady=10)
 
+        # Tab for Text Configuration
+        text_tab = tk.Frame(self.tab_control, bg="gray20")
+        self.tab_control.add(text_tab, text="Text")
+        
+        # Name input box at the top
+        self.text_tab_name_label = tk.Label(text_tab, text="Name:", bg="gray20", fg="white", font=("Arial", 12))
+        self.text_tab_name_label.pack(pady=5)
+        
+        self.text_tab_name_box = tk.Text(text_tab, height=1.2, width=30, wrap="word", bg="gray30", fg="white", font=("Arial", 10))
+        self.text_tab_name_box.pack(pady=5)
+        
+        # Radio buttons for text input type
+        self.text_input_var = tk.StringVar(value="single")
+        text_radio_frame = tk.Frame(text_tab, bg="gray20")
+        text_radio_frame.pack(pady=5)
+        
+        tk.Radiobutton(text_radio_frame, text="Single Line", variable=self.text_input_var, value="single", 
+                      bg="gray20", fg="white", selectcolor="gray30", 
+                      command=self.update_text_box).pack(side="left", padx=20)
+        tk.Radiobutton(text_radio_frame, text="Paragraph", variable=self.text_input_var, value="paragraph", 
+                      bg="gray20", fg="white", selectcolor="gray30",
+                      command=self.update_text_box).pack(side="left", padx=20)
+          # Text content frame with limited height
+        self.text_content_frame = tk.Frame(text_tab, bg="gray20")
+        self.text_content_frame.pack(pady=10, fill="both", expand=False)
+        
+        # Initial text box (will be recreated based on radio button selection)
+        self.current_text_box = None
+        self.update_text_box()
+        
+        # Save Button for Text tab - placed in its own frame to ensure visibility
+        save_button_frame = tk.Frame(text_tab, bg="gray20")
+        save_button_frame.pack(side="bottom", pady=10, fill="x")
+        
+        save_text_button = tk.Button(save_button_frame, text="Save", bg="blue", fg="white", font=("Arial", 12), 
+                                    command=self.save_text_config)
+        save_text_button.pack(pady=5)
+
     def browse_software(self):
         """Open file dialog to browse for executable"""
         file_path = filedialog.askopenfilename(
@@ -222,8 +260,7 @@ class ConfigPanel:
             keys = ["Volume Up", "Volume Down", "Mute", "Play/Pause", "Stop", "Next Track", "Previous Track"]
         elif category == "Numpad Keys":
             keys = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "+", "-", "*", "/", "Enter", "Decimal"]
-        elif category == "Other Keys":
-            keys = ["Escape", "Space", "Backspace", "windows"]
+        elif category == "Other Keys":            keys = ["Escape", "Space", "Backspace", "windows"]
         else:
             keys = []
         self.specific_keys_dropdown["values"] = keys
@@ -231,7 +268,7 @@ class ConfigPanel:
             self.specific_keys_var.set(keys[0])
         else:
             self.specific_keys_var.set("")
-
+            
     def save_config(self):
         """Collect user input and update the key configuration."""
         # Get the currently selected profile and key
@@ -277,7 +314,7 @@ class ConfigPanel:
                     
                 main_key = self.third_key_var.get().lower()
                 key_combination = modifiers + [main_key]
-        else:  # Software tab
+        elif active_tab == 2:  # Software tab
             name = self.software_text_box.get("1.0", "end-1c").strip()
             # Use custom path if provided, otherwise use selected software
             if self.custom_path_var.get().strip():
@@ -293,7 +330,15 @@ class ConfigPanel:
             
             # For software tab, set the software field
             extra_data["software"] = software
-        
+        else:  # Text tab
+            name = self.text_tab_name_box.get("1.0", "end-1c").strip()
+            if self.text_input_var.get() == "single":
+                text_content = self.current_text_box.get("1.0", "end-1c").strip()
+                key_combination = [text_content]
+            else:
+                text_content = self.current_text_box.get("1.0", "end-1c").strip()
+                key_combination = [text_content]
+
         # Update the key configuration
         if update_profile_key(profile_index, key_index, key_combination, name, extra_data):
             messagebox.showinfo("Success", f"Key {key_index} updated in profile {profile_index}")
@@ -303,6 +348,71 @@ class ConfigPanel:
                 self.app.refresh_keypad()
         else:
             messagebox.showerror("Error", "Failed to update key configuration")
+
+    def save_text_config(self):
+        """Save the text configuration to the selected key."""
+        # Get the currently selected profile and key
+        if not hasattr(self.app, 'selected_profile') or not hasattr(self.app, 'selected_key'):
+            messagebox.showwarning("Selection Required", "Please select a profile and key first.")
+            return
+            
+        profile_index = self.app.selected_profile
+        key_index = self.app.selected_key
+        
+        # Get the name and text content
+        name = self.text_tab_name_box.get("1.0", "end-1c").strip()
+        text_content = self.current_text_box.get("1.0", "end-1c")
+        
+        # Create extra data for text type
+        extra_data = {
+            "software": None,  # Remove any software configuration
+            "text_type": self.text_input_var.get(),
+            "text_content": text_content
+        }
+        
+        # For text input, we don't need a key combination, so we'll use a special identifier
+        key_combination = ["text_input"]
+        
+        # Update the key configuration
+        if update_profile_key(profile_index, key_index, key_combination, name, extra_data):
+            messagebox.showinfo("Success", f"Text configuration for Key {key_index} updated in profile {profile_index}")
+            
+            # Update UI to show the new configuration
+            if hasattr(self.app, 'refresh_keypad'):
+                self.app.refresh_keypad()
+
+    def update_text_box(self):
+        """Update the text box based on selected option (single line or paragraph)."""
+        # Clear the existing frame
+        for widget in self.text_content_frame.winfo_children():
+            widget.destroy()
+        
+        # Create appropriate text box based on selection
+        if self.text_input_var.get() == "single":
+            self.current_text_box = tk.Text(self.text_content_frame, height=1.5, width=30, 
+                                          wrap="none", bg="gray30", fg="white", font=("Arial", 10))
+            self.current_text_box.pack(pady=5, fill="x", padx=10)
+            
+            # Add a label explaining the purpose
+            tk.Label(self.text_content_frame, text="Single line of text to type", 
+                    bg="gray20", fg="light gray", font=("Arial", 8)).pack(pady=2)
+        else:  # paragraph
+            # Use a shorter paragraph text box (height=5 instead of 8)
+            self.current_text_box = tk.Text(self.text_content_frame, height=5, width=30, 
+                                          wrap="word", bg="gray30", fg="white", font=("Arial", 10))
+            self.current_text_box.pack(pady=5, fill="both", expand=False, padx=10)
+            
+            # Add scrollbar for paragraph text box
+            scrollbar = tk.Scrollbar(self.text_content_frame)
+            scrollbar.pack(side="right", fill="y")
+            
+            # Connect scrollbar to text box
+            self.current_text_box.config(yscrollcommand=scrollbar.set)
+            scrollbar.config(command=self.current_text_box.yview)
+            
+            # Add a label explaining the purpose
+            tk.Label(self.text_content_frame, text="Multiple lines of text to type", 
+                    bg="gray20", fg="light gray", font=("Arial", 8)).pack(pady=2)
 
     def get_selected_profile(self):
         """

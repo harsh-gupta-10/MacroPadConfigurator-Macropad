@@ -23,7 +23,7 @@ imports:
  &#8226;   <a href="#abc">abc</a>
  &#8226;   <a href="#codecs">codecs</a>
  &#8226;   <a href="#collections">collections</a>
- &#8226;   <a href="#components.config_panel_fixed">components.config_panel_fixed</a>
+ &#8226;   <a href="#components.config_panel_simplified">components.config_panel_simplified</a>
  &#8226;   <a href="#components.keypad_section">components.keypad_section</a>
  &#8226;   <a href="#components.profiles_section">components.profiles_section</a>
  &#8226;   <a href="#components.status_bar">components.status_bar</a>
@@ -1571,7 +1571,8 @@ imported by:
   <a target="code" href="///D:/codes2/pico%20pad/MacroPadConfigurator/components/__init__.py" type="text/plain"><tt>components</tt></a>
 <span class="moduletype">Package</span>  <div class="import">
 imported by:
-    <a href="#components.config_panel_fixed">components.config_panel_fixed</a>
+    <a href="#components.config_panel_simplified">components.config_panel_simplified</a>
+ &#8226;   <a href="#components.config_tabs">components.config_tabs</a>
  &#8226;   <a href="#components.keypad_section">components.keypad_section</a>
  &#8226;   <a href="#components.profiles_section">components.profiles_section</a>
  &#8226;   <a href="#components.status_bar">components.status_bar</a>
@@ -1581,15 +1582,17 @@ imported by:
 </div>
 
 <div class="node">
-  <a name="components.config_panel_fixed"></a>
-  <a target="code" href="///D:/codes2/pico%20pad/MacroPadConfigurator/components/config_panel_fixed.py" type="text/plain"><tt>components.config_panel_fixed</tt></a>
+  <a name="components.config_panel_simplified"></a>
+  <a target="code" href="///D:/codes2/pico%20pad/MacroPadConfigurator/components/config_panel_simplified.py" type="text/plain"><tt>components.config_panel_simplified</tt></a>
 <span class="moduletype">SourceModule</span>  <div class="import">
 imports:
     <a href="#components">components</a>
+ &#8226;   <a href="#components.config_tabs.advanced_tab">components.config_tabs.advanced_tab</a>
+ &#8226;   <a href="#components.config_tabs.basic_tab">components.config_tabs.basic_tab</a>
+ &#8226;   <a href="#components.config_tabs.software_tab">components.config_tabs.software_tab</a>
+ &#8226;   <a href="#components.config_tabs.text_tab">components.config_tabs.text_tab</a>
  &#8226;   <a href="#engine">engine</a>
- &#8226;   <a href="#os">os</a>
  &#8226;   <a href="#tkinter">tkinter</a>
- &#8226;   <a href="#tkinter.filedialog">tkinter.filedialog</a>
  &#8226;   <a href="#tkinter.messagebox">tkinter.messagebox</a>
  &#8226;   <a href="#tkinter.ttk">tkinter.ttk</a>
 
@@ -1598,6 +1601,125 @@ imports:
 imported by:
     <a href="#main">main</a>
  &#8226;   <a href="#main.py">main.py</a>
+
+  </div>
+
+</div>
+
+<div class="node">
+  <a name="components.config_tabs"></a>
+  <a target="code" href="///D:/codes2/pico%20pad/MacroPadConfigurator/components/config_tabs/__init__.py" type="text/plain"><tt>components.config_tabs</tt></a>
+<span class="moduletype">Package</span>  <div class="import">
+imports:
+    <a href="#components">components</a>
+
+  </div>
+  <div class="import">
+imported by:
+    <a href="#components.config_tabs.advanced_tab">components.config_tabs.advanced_tab</a>
+ &#8226;   <a href="#components.config_tabs.basic_tab">components.config_tabs.basic_tab</a>
+ &#8226;   <a href="#components.config_tabs.common">components.config_tabs.common</a>
+ &#8226;   <a href="#components.config_tabs.software_tab">components.config_tabs.software_tab</a>
+ &#8226;   <a href="#components.config_tabs.text_tab">components.config_tabs.text_tab</a>
+
+  </div>
+
+</div>
+
+<div class="node">
+  <a name="components.config_tabs.advanced_tab"></a>
+  <a target="code" href="///D:/codes2/pico%20pad/MacroPadConfigurator/components/config_tabs/advanced_tab.py" type="text/plain"><tt>components.config_tabs.advanced_tab</tt></a>
+<span class="moduletype">SourceModule</span>  <div class="import">
+imports:
+    <a href="#components.config_tabs">components.config_tabs</a>
+ &#8226;   <a href="#components.config_tabs.common">components.config_tabs.common</a>
+ &#8226;   <a href="#tkinter">tkinter</a>
+ &#8226;   <a href="#tkinter.ttk">tkinter.ttk</a>
+
+  </div>
+  <div class="import">
+imported by:
+    <a href="#components.config_panel_simplified">components.config_panel_simplified</a>
+
+  </div>
+
+</div>
+
+<div class="node">
+  <a name="components.config_tabs.basic_tab"></a>
+  <a target="code" href="///D:/codes2/pico%20pad/MacroPadConfigurator/components/config_tabs/basic_tab.py" type="text/plain"><tt>components.config_tabs.basic_tab</tt></a>
+<span class="moduletype">SourceModule</span>  <div class="import">
+imports:
+    <a href="#components.config_tabs">components.config_tabs</a>
+ &#8226;   <a href="#components.config_tabs.common">components.config_tabs.common</a>
+ &#8226;   <a href="#tkinter">tkinter</a>
+ &#8226;   <a href="#tkinter.ttk">tkinter.ttk</a>
+
+  </div>
+  <div class="import">
+imported by:
+    <a href="#components.config_panel_simplified">components.config_panel_simplified</a>
+
+  </div>
+
+</div>
+
+<div class="node">
+  <a name="components.config_tabs.common"></a>
+  <a target="code" href="///D:/codes2/pico%20pad/MacroPadConfigurator/components/config_tabs/common.py" type="text/plain"><tt>components.config_tabs.common</tt></a>
+<span class="moduletype">SourceModule</span>  <div class="import">
+imports:
+    <a href="#components.config_tabs">components.config_tabs</a>
+ &#8226;   <a href="#tkinter">tkinter</a>
+ &#8226;   <a href="#tkinter.ttk">tkinter.ttk</a>
+
+  </div>
+  <div class="import">
+imported by:
+    <a href="#components.config_tabs.advanced_tab">components.config_tabs.advanced_tab</a>
+ &#8226;   <a href="#components.config_tabs.basic_tab">components.config_tabs.basic_tab</a>
+ &#8226;   <a href="#components.config_tabs.software_tab">components.config_tabs.software_tab</a>
+ &#8226;   <a href="#components.config_tabs.text_tab">components.config_tabs.text_tab</a>
+
+  </div>
+
+</div>
+
+<div class="node">
+  <a name="components.config_tabs.software_tab"></a>
+  <a target="code" href="///D:/codes2/pico%20pad/MacroPadConfigurator/components/config_tabs/software_tab.py" type="text/plain"><tt>components.config_tabs.software_tab</tt></a>
+<span class="moduletype">SourceModule</span>  <div class="import">
+imports:
+    <a href="#components.config_tabs">components.config_tabs</a>
+ &#8226;   <a href="#components.config_tabs.common">components.config_tabs.common</a>
+ &#8226;   <a href="#os">os</a>
+ &#8226;   <a href="#tkinter">tkinter</a>
+ &#8226;   <a href="#tkinter.filedialog">tkinter.filedialog</a>
+ &#8226;   <a href="#tkinter.ttk">tkinter.ttk</a>
+
+  </div>
+  <div class="import">
+imported by:
+    <a href="#components.config_panel_simplified">components.config_panel_simplified</a>
+
+  </div>
+
+</div>
+
+<div class="node">
+  <a name="components.config_tabs.text_tab"></a>
+  <a target="code" href="///D:/codes2/pico%20pad/MacroPadConfigurator/components/config_tabs/text_tab.py" type="text/plain"><tt>components.config_tabs.text_tab</tt></a>
+<span class="moduletype">SourceModule</span>  <div class="import">
+imports:
+    <a href="#components.config_tabs">components.config_tabs</a>
+ &#8226;   <a href="#components.config_tabs.common">components.config_tabs.common</a>
+ &#8226;   <a href="#tkinter">tkinter</a>
+ &#8226;   <a href="#tkinter.ttk">tkinter.ttk</a>
+
+  </div>
+  <div class="import">
+imported by:
+    <a href="#components.config_panel_simplified">components.config_panel_simplified</a>
 
   </div>
 
@@ -4915,7 +5037,7 @@ imports:
   </div>
   <div class="import">
 imported by:
-    <a href="#components.config_panel_fixed">components.config_panel_fixed</a>
+    <a href="#components.config_panel_simplified">components.config_panel_simplified</a>
  &#8226;   <a href="#components.keypad_section">components.keypad_section</a>
  &#8226;   <a href="#components.profiles_section">components.profiles_section</a>
  &#8226;   <a href="#main">main</a>
@@ -6124,7 +6246,7 @@ imported by:
   <a target="code" href="///D:/codes2/pico%20pad/MacroPadConfigurator/main.py" type="text/plain"><tt>main</tt></a>
 <span class="moduletype">SourceModule</span>  <div class="import">
 imports:
-    <a href="#components.config_panel_fixed">components.config_panel_fixed</a>
+    <a href="#components.config_panel_simplified">components.config_panel_simplified</a>
  &#8226;   <a href="#components.keypad_section">components.keypad_section</a>
  &#8226;   <a href="#components.profiles_section">components.profiles_section</a>
  &#8226;   <a href="#components.status_bar">components.status_bar</a>
@@ -6310,7 +6432,7 @@ imported by:
  &#8226;   <a href="#_strptime">_strptime</a>
  &#8226;   <a href="#argparse">argparse</a>
  &#8226;   <a href="#bz2">bz2</a>
- &#8226;   <a href="#components.config_panel_fixed">components.config_panel_fixed</a>
+ &#8226;   <a href="#components.config_tabs.software_tab">components.config_tabs.software_tab</a>
  &#8226;   <a href="#components.status_bar">components.status_bar</a>
  &#8226;   <a href="#contextlib">contextlib</a>
  &#8226;   <a href="#ctypes">ctypes</a>
@@ -7725,7 +7847,12 @@ imports:
   </div>
   <div class="import">
 imported by:
-    <a href="#components.config_panel_fixed">components.config_panel_fixed</a>
+    <a href="#components.config_panel_simplified">components.config_panel_simplified</a>
+ &#8226;   <a href="#components.config_tabs.advanced_tab">components.config_tabs.advanced_tab</a>
+ &#8226;   <a href="#components.config_tabs.basic_tab">components.config_tabs.basic_tab</a>
+ &#8226;   <a href="#components.config_tabs.common">components.config_tabs.common</a>
+ &#8226;   <a href="#components.config_tabs.software_tab">components.config_tabs.software_tab</a>
+ &#8226;   <a href="#components.config_tabs.text_tab">components.config_tabs.text_tab</a>
  &#8226;   <a href="#components.keypad_section">components.keypad_section</a>
  &#8226;   <a href="#components.profiles_section">components.profiles_section</a>
  &#8226;   <a href="#components.status_bar">components.status_bar</a>
@@ -7811,7 +7938,7 @@ imports:
   </div>
   <div class="import">
 imported by:
-    <a href="#components.config_panel_fixed">components.config_panel_fixed</a>
+    <a href="#components.config_tabs.software_tab">components.config_tabs.software_tab</a>
  &#8226;   <a href="#tkinter">tkinter</a>
 
   </div>
@@ -7829,7 +7956,7 @@ imports:
   </div>
   <div class="import">
 imported by:
-    <a href="#components.config_panel_fixed">components.config_panel_fixed</a>
+    <a href="#components.config_panel_simplified">components.config_panel_simplified</a>
  &#8226;   <a href="#engine">engine</a>
  &#8226;   <a href="#tkinter">tkinter</a>
  &#8226;   <a href="#tkinter.simpledialog">tkinter.simpledialog</a>
@@ -7865,7 +7992,12 @@ imports:
   </div>
   <div class="import">
 imported by:
-    <a href="#components.config_panel_fixed">components.config_panel_fixed</a>
+    <a href="#components.config_panel_simplified">components.config_panel_simplified</a>
+ &#8226;   <a href="#components.config_tabs.advanced_tab">components.config_tabs.advanced_tab</a>
+ &#8226;   <a href="#components.config_tabs.basic_tab">components.config_tabs.basic_tab</a>
+ &#8226;   <a href="#components.config_tabs.common">components.config_tabs.common</a>
+ &#8226;   <a href="#components.config_tabs.software_tab">components.config_tabs.software_tab</a>
+ &#8226;   <a href="#components.config_tabs.text_tab">components.config_tabs.text_tab</a>
  &#8226;   <a href="#tkinter">tkinter</a>
 
   </div>

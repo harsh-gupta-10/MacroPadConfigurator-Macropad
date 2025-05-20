@@ -67,9 +67,33 @@
   ('components',
    'D:\\codes2\\pico pad\\MacroPadConfigurator\\components\\__init__.py',
    'PYMODULE'),
-  ('components.config_panel_fixed',
+  ('components.config_panel_simplified',
    'D:\\codes2\\pico '
-   'pad\\MacroPadConfigurator\\components\\config_panel_fixed.py',
+   'pad\\MacroPadConfigurator\\components\\config_panel_simplified.py',
+   'PYMODULE'),
+  ('components.config_tabs',
+   'D:\\codes2\\pico '
+   'pad\\MacroPadConfigurator\\components\\config_tabs\\__init__.py',
+   'PYMODULE'),
+  ('components.config_tabs.advanced_tab',
+   'D:\\codes2\\pico '
+   'pad\\MacroPadConfigurator\\components\\config_tabs\\advanced_tab.py',
+   'PYMODULE'),
+  ('components.config_tabs.basic_tab',
+   'D:\\codes2\\pico '
+   'pad\\MacroPadConfigurator\\components\\config_tabs\\basic_tab.py',
+   'PYMODULE'),
+  ('components.config_tabs.common',
+   'D:\\codes2\\pico '
+   'pad\\MacroPadConfigurator\\components\\config_tabs\\common.py',
+   'PYMODULE'),
+  ('components.config_tabs.software_tab',
+   'D:\\codes2\\pico '
+   'pad\\MacroPadConfigurator\\components\\config_tabs\\software_tab.py',
+   'PYMODULE'),
+  ('components.config_tabs.text_tab',
+   'D:\\codes2\\pico '
+   'pad\\MacroPadConfigurator\\components\\config_tabs\\text_tab.py',
    'PYMODULE'),
   ('components.keypad_section',
    'D:\\codes2\\pico pad\\MacroPadConfigurator\\components\\keypad_section.py',

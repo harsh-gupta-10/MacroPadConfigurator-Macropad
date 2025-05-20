@@ -7,6 +7,7 @@ class ConfigPanel:
     def __init__(self, parent, app=None):
         self.parent = parent
         self.app = app  # Reference to main app
+        self.shared_name = ""  # Shared name variable for all tabs
         self.create_ui()
 
     def create_ui(self):
@@ -260,8 +261,10 @@ class ConfigPanel:
             keys = ["Volume Up", "Volume Down", "Mute", "Play/Pause", "Stop", "Next Track", "Previous Track"]
         elif category == "Numpad Keys":
             keys = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "+", "-", "*", "/", "Enter", "Decimal"]
-        elif category == "Other Keys":            keys = ["Escape", "Space", "Backspace", "windows"]
+        elif category == "Other Keys":
+            keys = ["Escape", "Space", "Backspace", "windows"]
         else:
+            keys = []
             keys = []
         self.specific_keys_dropdown["values"] = keys
         if keys:

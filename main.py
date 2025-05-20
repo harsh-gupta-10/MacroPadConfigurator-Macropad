@@ -2,7 +2,7 @@ import tkinter as tk
 
 from components.profiles_section import ProfilesSection
 from components.keypad_section import KeypadSection
-from components.config_panel import ConfigPanel
+from components.config_panel_fixed import ConfigPanel
 from components.status_bar import StatusBar
 from engine import load_profiles
 

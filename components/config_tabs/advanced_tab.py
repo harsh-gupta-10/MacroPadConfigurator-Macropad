@@ -27,12 +27,10 @@ class AdvancedConfigTab:
         self.text_box = create_name_textbox(self.tab_frame)
         
         # Track text changes in this field
-        self.text_box.bind("<KeyRelease>", lambda e: self.controller.update_shared_name(self.text_box))
-        
-        # Radio buttons for key combination options
+        self.text_box.bind("<KeyRelease>", lambda e: self.controller.update_shared_name(self.text_box))        # Radio buttons for key combination options
         self.key_combo_var = tk.IntVar(value=2)
         radio_frame = tk.Frame(self.tab_frame, bg="gray20")
-        radio_frame.pack(pady=5)
+        radio_frame.pack(pady=1)
         
         tk.Radiobutton(radio_frame, text="2 Keys", variable=self.key_combo_var, value=2, 
                       bg="gray20", fg="white", selectcolor="gray30", 
@@ -43,7 +41,7 @@ class AdvancedConfigTab:
 
         # Frame for Dropdowns
         self.dropdown_frame = tk.Frame(self.tab_frame, bg="gray20")
-        self.dropdown_frame.pack(pady=10)
+        self.dropdown_frame.pack(pady=1)
 
         # First modifier dropdown
         self.first_modifier_label = tk.Label(self.dropdown_frame, text="First Modifier:", bg="gray20", fg="white")
@@ -154,29 +152,24 @@ class AdvancedConfigTab:
         if num_keys == 2:
             # Show only 2 dropdowns (first modifier and main key)
             self.first_modifier_var.set("None")
-            self.second_modifier_var.set("None")
-            
-            # First key (modifier)
-            self.first_modifier_label.pack(pady=(5,0))
-            self.modifier_dropdown_1.pack(pady=(0,5))
-            
-            # Second key (main key)
-            self.third_key_label.pack(pady=(5,0))
-            self.third_dropdown.pack(pady=(0,5))
+            self.second_modifier_var.set("None")            # First key (modifier)
+            self.first_modifier_label.pack(pady=(1,0))
+            self.modifier_dropdown_1.pack(pady=(0,1))
+              # Second key (main key)
+            self.third_key_label.pack(pady=(1,0))
+            self.third_dropdown.pack(pady=(0,1))
             
         else:  # num_keys == 3
             # Show all 3 dropdowns
             self.first_modifier_var.set("None")
             self.second_modifier_var.set("None")
-            
-            # First modifier
-            self.first_modifier_label.pack(pady=(5,0))
-            self.modifier_dropdown_1.pack(pady=(0,5))
-            
-            # Second modifier
-            self.second_modifier_label.pack(pady=(5,0))
-            self.modifier_dropdown_2.pack(pady=(0,5))
+              # First modifier
+            self.first_modifier_label.pack(pady=(1,0))
+            self.modifier_dropdown_1.pack(pady=(0,1))
+              # Second modifier
+            self.second_modifier_label.pack(pady=(1,0))
+            self.modifier_dropdown_2.pack(pady=(0,1))
             
             # Main key
-            self.third_key_label.pack(pady=(5,0))
-            self.third_dropdown.pack(pady=(0,5))
+            self.third_key_label.pack(pady=(1,0))
+            self.third_dropdown.pack(pady=(0,1))

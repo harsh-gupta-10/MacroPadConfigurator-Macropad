@@ -28,10 +28,8 @@ class SoftwareConfigTab:
         self.text_box = create_name_textbox(self.tab_frame)
         
         # Track text changes in this field
-        self.text_box.bind("<KeyRelease>", lambda e: self.controller.update_shared_name(self.text_box))
-        
-        # Software selection dropdown
-        tk.Label(self.tab_frame, text="Select Software:", bg="gray20", fg="white", font=("Arial", 12)).pack(pady=5)
+        self.text_box.bind("<KeyRelease>", lambda e: self.controller.update_shared_name(self.text_box))        # Software selection dropdown
+        tk.Label(self.tab_frame, text="Select Software:", bg="gray20", fg="white", font=("Arial", 12)).pack(pady=1)
         self.software_var = tk.StringVar(value="notepad")
         common_software = [
             "notepad", "mspaint", "calc", "explorer", 
@@ -42,27 +40,23 @@ class SoftwareConfigTab:
         ]
         
         self.software_dropdown = ttk.Combobox(self.tab_frame, textvariable=self.software_var, state="readonly", values=common_software)
-        self.software_dropdown.pack(pady=5)
-        
-        # Custom software path option
+        self.software_dropdown.pack(pady=1)          # Custom software path option
         custom_frame = tk.Frame(self.tab_frame, bg="gray20")
-        custom_frame.pack(pady=10, fill="x", padx=20)
+        custom_frame.pack(pady=1, fill="x", padx=20)
         
         tk.Label(custom_frame, text="Or Enter your Software name:", bg="gray20", fg="white").pack(anchor="w")
         
         path_frame = tk.Frame(custom_frame, bg="gray20")
-        path_frame.pack(fill="x", pady=5)
+        path_frame.pack(fill="x", pady=2)
         
         self.custom_path_var = tk.StringVar()
         self.custom_path_entry = tk.Entry(path_frame, textvariable=self.custom_path_var, bg="gray30", fg="white")
         self.custom_path_entry.pack(side="left", expand=True, fill="x", padx=(0,5))
         
         browse_button = tk.Button(path_frame, text="Browse...", bg="gray40", fg="white", command=self.browse_software)
-        browse_button.pack(side="right")
-        
-        # Modifier key option (for software launch with hotkey)
+        browse_button.pack(side="right")          # Modifier key option (for software launch with hotkey)
         modifier_frame = tk.Frame(self.tab_frame, bg="gray20")
-        modifier_frame.pack(pady=10)
+        modifier_frame.pack(pady=1)
         
         tk.Label(modifier_frame, text="Type:", bg="gray20", fg="white").pack(side="left", padx=5)
         

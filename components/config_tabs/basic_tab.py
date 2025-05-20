@@ -27,23 +27,20 @@ class BasicConfigTab:
         self.text_box = create_name_textbox(self.tab_frame)
         
         # Track text changes in this field
-        self.text_box.bind("<KeyRelease>", lambda e: self.controller.update_shared_name(self.text_box))
-        
-        # Category Dropdown (First Dropdown)
-        tk.Label(self.tab_frame, text="Select Category", bg="gray20", fg="white", font=("Arial", 12)).pack(pady=5)
+        self.text_box.bind("<KeyRelease>", lambda e: self.controller.update_shared_name(self.text_box))        # Category Dropdown (First Dropdown)
+        tk.Label(self.tab_frame, text="Select Category", bg="gray20", fg="white", font=("Arial", 12)).pack(pady=1)
         self.key_category_var = tk.StringVar()
         self.key_category_var.set("Alphabets")  # Default Category
 
         category_dropdown = ttk.Combobox(self.tab_frame, textvariable=self.key_category_var, state="readonly")
         category_dropdown["values"] = ["Alphabets", "Numbers", "Symbols", "F1-F24", "Navigation Keys", 
                                     "Modifiers", "System Keys", "Media Keys", "Numpad Keys", "Other Keys"]
-        category_dropdown.pack(pady=5)
-        
-        # Specific Keys Dropdown (Second Dropdown)
-        tk.Label(self.tab_frame, text="Select Key", bg="gray20", fg="white", font=("Arial", 12)).pack(pady=5)
+        category_dropdown.pack(pady=1)
+          # Specific Keys Dropdown (Second Dropdown)
+        tk.Label(self.tab_frame, text="Select Key", bg="gray20", fg="white", font=("Arial", 12)).pack(pady=1)
         self.specific_keys_var = tk.StringVar()
         self.specific_keys_dropdown = ttk.Combobox(self.tab_frame, textvariable=self.specific_keys_var, state="readonly")
-        self.specific_keys_dropdown.pack(pady=5)
+        self.specific_keys_dropdown.pack(pady=1)
 
         # Update the second dropdown based on the selected category
         self.update_specific_keys()

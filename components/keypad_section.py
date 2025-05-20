@@ -43,14 +43,12 @@ class KeypadSection:
         else:
             self.keypad_frame = tk.Frame(self.root, bg=COLORS["bg_medium"], bd=2, relief="ridge")
             
-        self.keypad_frame.place(x=200, y=70, width=350, height=370)
+        self.keypad_frame.place(x=200, y=10, width=350, height=430)
         
         # Get interior frame reference
-        interior = self.keypad_frame.interior if hasattr(self.keypad_frame, 'interior') else self.keypad_frame
-        
-        # Title with modern styling
+        interior = self.keypad_frame.interior if hasattr(self.keypad_frame, 'interior') else self.keypad_frame        # Title with modern styling
         title_frame = tk.Frame(interior, bg=COLORS["bg_medium"])
-        title_frame.pack(fill="x", pady=(5, 15))
+        title_frame.pack(fill="x", pady=(0, 2))
         
         title_label = tk.Label(
             title_frame, 
@@ -59,11 +57,9 @@ class KeypadSection:
             fg=COLORS["accent"], 
             font=("Segoe UI", 16, "bold")
         )
-        title_label.pack(side="left", padx=10)
-        
-        # Add a subtle separator line
+        title_label.pack(side="left", padx=10)        # Add a subtle separator line
         separator = tk.Frame(interior, height=1, bg=COLORS["bg_light"])
-        separator.pack(fill="x", padx=20, pady=5)
+        separator.pack(fill="x", padx=20, pady=1)
         
         # Frame for keypad grid with a slight gradient background
         self.button_frame = tk.Frame(interior, bg=COLORS["bg_medium"])

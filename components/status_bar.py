@@ -55,7 +55,7 @@ class StatusBar:
                 relief="ridge"
             )
         
-        status_frame.place(x=10, y=460, width=880, height=40)
+        status_frame.place(x=10, y=450, width=880, height=40)
         
         # Get interior frame reference
         interior = status_frame.interior if hasattr(status_frame, 'interior') else status_frame

@@ -13,16 +13,15 @@ class ConfigPanel:
         self.parent = parent
         self.app = app  # Reference to main app
         self.shared_name = ""  # Shared name variable for all tabs
-        self.tab_modules = []  # References to tab modules
-        
+        self.tab_modules = []  # References to tab modules        
         self.create_ui()
         
     def create_ui(self):
         """Create the key changer panel."""
         config_frame = tk.Frame(self.parent, bg="gray25", bd=2, relief="ridge")
-        config_frame.place(x=570, y=70, width=300, height=400)
+        config_frame.place(x=570, y=10, width=300, height=460)
 
-        tk.Label(config_frame, text="Key Changer Panel", bg="gray25", fg="white", font=("Arial", 14, "bold"), pady=5).pack()
+        tk.Label(config_frame, text="Key Changer Panel", bg="gray25", fg="white", font=("Arial", 14, "bold"), pady=0).pack()
 
         # Create the tab control
         self.tab_control = ttk.Notebook(config_frame)

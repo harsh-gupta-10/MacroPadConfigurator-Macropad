@@ -42,15 +42,18 @@ class TextConfigTab:
         self.text_content_frame = tk.Frame(self.tab_frame, bg="gray20")
         self.text_content_frame.pack(pady=1, fill="both", expand=False)
         
-        # Initial text box (will be recreated based on radio button selection)
-        self.current_text_box = None
+        # Initial text box (will be recreated based on radio button selection)        self.current_text_box = None
         self.update_text_box()
-          # Save Button for Text tab - placed in its own frame to ensure visibility
+        
+        # Save Button for Text tab - placed in its own frame to ensure visibility
         save_button_frame = tk.Frame(self.tab_frame, bg="gray20")
         save_button_frame.pack(side="bottom", pady=1, fill="x")
-        save_text_button = tk.Button(save_button_frame, text="Save", bg="blue", fg="white", 
-                                   font=("Arial", 12), command=self.controller.save_text_config)
-        save_text_button.pack(pady=3)
+          # Use create_save_button to maintain consistency
+        self.save_button = create_save_button(save_button_frame, self.controller.save_text_config)
+        
+        # Register save button with controller
+        if hasattr(self.controller, 'register_save_button'):
+            self.controller.register_save_button(self.save_button)
     
     def update_text_box(self):
         """Update the text box based on selected option (single line or paragraph)."""

@@ -86,10 +86,12 @@ class AdvancedConfigTab:
         self.modifier_dropdown_2.bind("<<ComboboxSelected>>", self.sync_modifiers)
 
         # Initialize dropdowns based on default radio selection
-        self.update_key_dropdowns()
-
-        # Save Button
+        self.update_key_dropdowns()        # Save Button
         self.save_button = create_save_button(self.tab_frame, self.controller.save_config)
+        
+        # Register save button with controller
+        if hasattr(self.controller, 'register_save_button'):
+            self.controller.register_save_button(self.save_button)
     
     def get_config(self):
         """Get configuration data from this tab."""

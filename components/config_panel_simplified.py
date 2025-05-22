@@ -13,13 +13,14 @@ class ConfigPanel:
         self.parent = parent
         self.app = app  # Reference to main app
         self.shared_name = ""  # Shared name variable for all tabs
-        self.tab_modules = []  # References to tab modules        
+        self.tab_modules = []  # References to tab modules
+        self.save_buttons = []  # Track all save buttons
         self.create_ui()
         
     def create_ui(self):
         """Create the key changer panel."""
         config_frame = tk.Frame(self.parent, bg="gray25", bd=2, relief="ridge")
-        config_frame.place(x=570, y=10, width=300, height=460)
+        config_frame.place(x=570, y=10, width=300, height=430)
 
         tk.Label(config_frame, text="Key Changer Panel", bg="gray25", fg="white", font=("Arial", 14, "bold"), pady=0).pack()
 
@@ -41,6 +42,9 @@ class ConfigPanel:
         
         # Set up loaded profile/key information if available
         self.load_key_data()
+        
+        # Initialize save buttons to disabled (since no key is selected initially)
+        self.update_save_buttons()
     
     def update_shared_name(self, source_textbox):
         """Update the shared name variable from the source textbox and update all other textboxes."""
@@ -81,6 +85,9 @@ class ConfigPanel:
                 # Update all name fields
                 for tab in self.tab_modules:
                     tab.set_name(name)
+                    
+            # Enable save buttons when a key is selected
+            self.update_save_buttons()
     
     def save_config(self):
         """Collect user input and update the key configuration."""
@@ -143,3 +150,14 @@ class ConfigPanel:
                 self.app.refresh_keypad()
         else:
             messagebox.showerror("Error", "Failed to update text configuration")
+    
+    def register_save_button(self, button):
+        """Register a save button to be enabled/disabled based on key selection."""
+        if button and button not in self.save_buttons:
+            self.save_buttons.append(button)
+        
+    def update_save_buttons(self):
+        """Update the state of all save buttons based on key selection."""
+        state = "normal" if self.app and hasattr(self.app, 'selected_key') and self.app.selected_key else "disabled"
+        for button in self.save_buttons:
+            button.config(state=state)

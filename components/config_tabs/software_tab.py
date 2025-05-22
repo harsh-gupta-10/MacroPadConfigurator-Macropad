@@ -65,9 +65,12 @@ class SoftwareConfigTab:
             modifier_frame, textvariable=self.software_modifier_var, state="readonly",
             values=["Software"], width=10
         ).pack(side="left", padx=5)
-        
-        # Save Button
+          # Save Button
         self.save_button = create_save_button(self.tab_frame, self.controller.save_config)
+        
+        # Register save button with controller
+        if hasattr(self.controller, 'register_save_button'):
+            self.controller.register_save_button(self.save_button)
     
     def get_config(self):
         """Get configuration data from this tab."""

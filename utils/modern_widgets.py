@@ -1,22 +1,18 @@
 import tkinter as tk
 
-# Try importing colors, falling back to a default set if not available
-try:
-    from main import COLORS
-except ImportError:
-    # Fallback colors - modern dark theme
-    COLORS = {
-        "bg_dark": "#1E1E2E",     # Dark background
-        "bg_medium": "#2A2A3C",   # Medium background for frames
-        "bg_light": "#313244",    # Light background for elements
-        "accent": "#89B4FA",      # Blue accent color
-        "text": "#CDD6F4",        # Light text
-        "text_dim": "#A6ADC8",    # Dimmed text
-        "success": "#A6E3A1",     # Green for success
-        "warning": "#F9E2AF",     # Yellow for warnings
-        "error": "#F38BA8",       # Red for errors
-        "selection": "#45475A"    # Selection color
-    }
+# Define colors directly to avoid circular imports
+COLORS = {
+    "bg_dark": "#1E1E2E",     # Dark background
+    "bg_medium": "#2A2A3C",   # Medium background for frames
+    "bg_light": "#313244",    # Light background for elements
+    "accent": "#89B4FA",      # Blue accent color
+    "text": "#CDD6F4",        # Light text
+    "text_dim": "#A6ADC8",    # Dimmed text
+    "success": "#A6E3A1",     # Green for success
+    "warning": "#F9E2AF",     # Yellow for warnings
+    "error": "#F38BA8",       # Red for errors
+    "selection": "#45475A"    # Selection color
+}
 
 # Enhanced Modern Key Button class with improved hover effects
 class ModernKeyButton(tk.Canvas):
@@ -68,8 +64,8 @@ class ModernKeyButton(tk.Canvas):
         self.name_id = self.create_text(
             width/2, height/2 - 15, 
             text=text, 
-            fill=self.fg_color, 
-            font=("Segoe UI", 10, "bold"),
+            fill=self.fg_color,
+            font=("Segoe UI", 11, "bold"),
             width=width-20,
             justify="center"
         )
@@ -111,8 +107,7 @@ class ModernKeyButton(tk.Canvas):
             x1, y2,
             x1, y2-radius,
             x1, y1+radius,
-            x1, y1
-        ]
+            x1, y1        ]
         return self.create_polygon(points, smooth=True, **kwargs)
     
     def set_text(self, text):
@@ -127,24 +122,41 @@ class ModernKeyButton(tk.Canvas):
                 self.itemconfig(self.keys_id, text="◇ Not Set")
             else:
                 self.itemconfig(self.keys_id, text="◆ " + keys)
-        else:
-            # Just set the name if there's no key combo
+        else:            # Just set the name if there's no key combo
             self.itemconfig(self.name_id, text=text)
             self.itemconfig(self.keys_id, text="")
-    
+
+    def set_profile_text(self, text):
+        """Set text for a profile button - positioned in the center without splitting"""
+        # Update text position to center of button with a smaller font for better fit
+        self.itemconfig(self.name_id, text=text, font=("Segoe UI", 10, "bold"))  # Reduced from 12 to 10
+        self.itemconfig(self.keys_id, text="")  # Clear any key text
+        
+        # Adjust position of main text to center
+        self.coords(self.name_id, self.width/2, self.height/2)
+
     def set_selected(self, selected):
-        """Set the selected state of this button"""
+        """Set the selected state of this button with enhanced visual feedback"""
         self.selected = selected
         if selected:
-            # Create a glowing border effect
+            # Create an enhanced glowing border effect
             self.itemconfig(self.rect_id, fill=COLORS["selection"])
+            # Make text more prominent with accent color
             self.itemconfig(self.name_id, fill=COLORS["accent"])
             self.itemconfig(self.keys_id, fill=COLORS["accent"])
+            # Make the font bolder but smaller when selected
+            self.itemconfig(self.name_id, font=("Segoe UI", 10, "bold"))
+            # Add a shadow effect for depth
+            self.itemconfig(self.shadow_id, fill=COLORS["accent"])
         else:
             # Reset to normal state
             self.itemconfig(self.rect_id, fill=self.bg_color)
             self.itemconfig(self.name_id, fill=self.fg_color)
             self.itemconfig(self.keys_id, fill=self.fg_color)
+            # Reset font to normal and smaller
+            self.itemconfig(self.name_id, font=("Segoe UI", 9, "bold"))
+            # Reset shadow
+            self.itemconfig(self.shadow_id, fill="#222222")
     
     def on_enter(self, event):
         """Handle mouse enter event with smoother hover effect"""
@@ -212,3 +224,4 @@ class ModernKeyButton(tk.Canvas):
         if hasattr(self, '_pending_command') and self._pending_command:
             self._pending_command()
             delattr(self, '_pending_command')
+

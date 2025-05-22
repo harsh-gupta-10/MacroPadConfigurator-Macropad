@@ -44,10 +44,12 @@ class BasicConfigTab:
 
         # Update the second dropdown based on the selected category
         self.update_specific_keys()
-        category_dropdown.bind("<<ComboboxSelected>>", self.update_specific_keys)
-
-        # Save Button
+        category_dropdown.bind("<<ComboboxSelected>>", self.update_specific_keys)        # Save Button
         self.save_button = create_save_button(self.tab_frame, self.controller.save_config)
+        
+        # Register save button with controller
+        if hasattr(self.controller, 'register_save_button'):
+            self.controller.register_save_button(self.save_button)
     
     def update_specific_keys(self, event=None):
         """Update the specific keys dropdown based on the selected category."""

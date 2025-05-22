@@ -1,5 +1,19 @@
 import tkinter as tk
 
+# Define COLORS globally to avoid circular import
+COLORS = {
+    "bg_dark": "#1E1E2E",     # Dark background
+    "bg_medium": "#2A2A3C",   # Medium background for frames
+    "bg_light": "#313244",    # Light background for elements
+    "accent": "#89B4FA",      # Blue accent color
+    "text": "#CDD6F4",        # Light text
+    "text_dim": "#A6ADC8",    # Dimmed text
+    "success": "#A6E3A1",     # Green for success
+    "warning": "#F9E2AF",     # Yellow for warnings
+    "error": "#F38BA8",       # Red for errors
+    "selection": "#45475A"    # Selection color
+}
+
 from components.profiles_section import ProfilesSection
 from components.keypad_section import KeypadSection
 from components.config_panel_simplified import ConfigPanel
@@ -56,6 +70,10 @@ class MacroPadConfigurator:
         """Set the currently selected key."""
         self.selected_key = key_index
         self.status_bar.update_status(f"Selected Key: {key_index} on Profile: {self.selected_profile}")
+        
+        # Enable save buttons in config panel when a key is selected
+        if hasattr(self, 'config_panel') and hasattr(self.config_panel, 'update_save_buttons'):
+            self.config_panel.update_save_buttons()
         
     def refresh_keypad(self):
         """Refresh the keypad display based on current profile"""

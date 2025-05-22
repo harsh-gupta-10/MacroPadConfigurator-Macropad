@@ -16,6 +16,6 @@ def create_name_textbox(parent, label_text="Name(Use):"):
 
 def create_save_button(parent, command, text="Save"):
     """Create a standardized save button."""
-    save_button = tk.Button(parent, text=text, bg="blue", fg="white", font=("Arial", 12), command=command)
+    save_button = tk.Button(parent, text=text, bg="blue", fg="white", font=("Arial", 12), command=command, state="disabled")
     save_button.pack(pady=3)
     return save_button

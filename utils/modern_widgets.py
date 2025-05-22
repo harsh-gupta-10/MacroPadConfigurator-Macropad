@@ -65,7 +65,7 @@ class ModernKeyButton(tk.Canvas):
             width/2, height/2 - 15, 
             text=text, 
             fill=self.fg_color,
-            font=("Segoe UI", 11, "bold"),
+            font=("Segoe UI", 9, "bold"),
             width=width-20,
             justify="center"
         )

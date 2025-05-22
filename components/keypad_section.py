@@ -36,14 +36,14 @@ class KeypadSection:
         if 'ModernFrame' in globals():
             self.keypad_frame = ModernFrame(
                 self.root, 
-                corner_radius=15, 
+                corner_radius=18, 
                 padding=10,
                 bg=COLORS["bg_medium"]
             )
         else:
             self.keypad_frame = tk.Frame(self.root, bg=COLORS["bg_medium"], bd=2, relief="ridge")
             
-        self.keypad_frame.place(x=200, y=10, width=350, height=430)
+        self.keypad_frame.place(x=200, y=10, width=365, height=430)
         
         # Get interior frame reference
         interior = self.keypad_frame.interior if hasattr(self.keypad_frame, 'interior') else self.keypad_frame        # Title with modern styling

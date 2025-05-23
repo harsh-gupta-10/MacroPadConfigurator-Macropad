@@ -1,0 +1,9 @@
+/build
+/.vscode
+/.idea
+/.DS_Store
+/dist
+
+.exe
+*.dll
+.spec

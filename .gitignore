@@ -2,7 +2,10 @@
 /.vscode
 
 /dist
-*/__pycache__
+dist/*
+/__pycache__
+utils/__pycache__
+components/__pycache__
 *.pyc
 *.pyo
 *.exe

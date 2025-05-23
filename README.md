@@ -4,8 +4,8 @@
 
 The MacroPad Configurator is a software tool designed to customize and configure a DIY macro pad built using the Raspberry Pi Pico RP2040. This tool allows you to program custom keystrokes, shortcuts, and actions for each button on your macro pad, enhancing your workflow and productivity.
 
-![MacroPad Hardware](/img/macropad.jpg)
-![MacroPad Configurator Software](/img/screenshot.png)
+![MacroPad Hardware](https://github.com/harsh-gupta-10/MacroPadConfigurator-Macropad/blob/main/img/macropad.jpg?raw=true)
+![MacroPad Configurator Software](https://github.com/harsh-gupta-10/MacroPadConfigurator-Macropad/blob/main/img/screenshot.png?raw=true)
 
 ### Project Links
 - [MacroPad Configurator Software (This Repository)](https://github.com/harsh-gupta-10/MacroPadConfigurator-Macropad)

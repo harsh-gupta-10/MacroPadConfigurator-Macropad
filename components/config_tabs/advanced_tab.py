@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
-from .common import create_name_textbox, create_save_button
+from .common import create_name_textbox, create_save_button, COLORS
 
 class AdvancedConfigTab:
     def __init__(self, parent, controller):
@@ -15,7 +15,7 @@ class AdvancedConfigTab:
         self.controller = controller
         
         # Create tab frame
-        self.tab_frame = tk.Frame(parent, bg="gray20")
+        self.tab_frame = tk.Frame(parent, bg=COLORS["bg_medium"])
         parent.add(self.tab_frame, text="Advanced")
         
         # Create UI components
@@ -26,41 +26,78 @@ class AdvancedConfigTab:
         # Name input box
         self.text_box = create_name_textbox(self.tab_frame)
         
-        # Track text changes in this field
-        self.text_box.bind("<KeyRelease>", lambda e: self.controller.update_shared_name(self.text_box))        # Radio buttons for key combination options
+        # Track text changes in this field        self.text_box.bind("<KeyRelease>", lambda e: self.controller.update_shared_name(self.text_box))
+        
+        # Create a spacer
+        spacer = tk.Frame(self.tab_frame, height=5, bg=COLORS["bg_medium"])
+        spacer.pack(fill="x")
+        
+        # Radio buttons for key combination options
         self.key_combo_var = tk.IntVar(value=2)
-        radio_frame = tk.Frame(self.tab_frame, bg="gray20")
-        radio_frame.pack(pady=1)
+        radio_frame = tk.Frame(self.tab_frame, bg=COLORS["bg_medium"])
+        radio_frame.pack(pady=5)
+        
+        # Modern styling for radio buttons
+        radio_bg = COLORS["bg_medium"]
+        radio_fg = COLORS["text"]
+        radio_select = COLORS["bg_light"]
+        radio_active_bg = COLORS["selection"]
+        radio_font = ("Segoe UI", 10)
         
         tk.Radiobutton(radio_frame, text="2 Keys", variable=self.key_combo_var, value=2, 
-                      bg="gray20", fg="white", selectcolor="gray30", 
+                      bg=radio_bg, fg=radio_fg, selectcolor=radio_select, 
+                      activebackground=radio_active_bg, activeforeground=radio_fg,
+                      font=radio_font,
                       command=self.update_key_dropdowns).pack(side="left", padx=20)
+                      
         tk.Radiobutton(radio_frame, text="3 Keys", variable=self.key_combo_var, value=3, 
-                      bg="gray20", fg="white", selectcolor="gray30",
-                      command=self.update_key_dropdowns).pack(side="left", padx=20)
-
-        # Frame for Dropdowns
-        self.dropdown_frame = tk.Frame(self.tab_frame, bg="gray20")
-        self.dropdown_frame.pack(pady=1)
+                      bg=radio_bg, fg=radio_fg, selectcolor=radio_select,
+                      activebackground=radio_active_bg, activeforeground=radio_fg,
+                      font=radio_font,
+                      command=self.update_key_dropdowns).pack(side="left", padx=20)        # Frame for Dropdowns with modern styling
+        self.dropdown_frame = tk.Frame(self.tab_frame, bg=COLORS["bg_medium"])
+        self.dropdown_frame.pack(pady=5, padx=10, fill="x")
 
         # First modifier dropdown
-        self.first_modifier_label = tk.Label(self.dropdown_frame, text="First Modifier:", bg="gray20", fg="white")
+        self.first_modifier_label = tk.Label(
+            self.dropdown_frame, 
+            text="First Modifier:", 
+            bg=COLORS["bg_medium"], 
+            fg=COLORS["accent"],
+            font=("Segoe UI", 11)
+        )
         self.first_modifier_var = tk.StringVar(value="None")
         self.modifier_dropdown_1 = ttk.Combobox(
-            self.dropdown_frame, textvariable=self.first_modifier_var, state="readonly",
+            self.dropdown_frame, 
+            textvariable=self.first_modifier_var, 
+            state="readonly",
+            style="TCombobox",
             values=["None", "Ctrl", "Alt", "Shift", "windows"]
+        )        # Second modifier dropdown (can't match first)
+        self.second_modifier_label = tk.Label(
+            self.dropdown_frame, 
+            text="Second Modifier:", 
+            bg=COLORS["bg_medium"], 
+            fg=COLORS["accent"],
+            font=("Segoe UI", 11)
         )
-
-        # Second modifier dropdown (can't match first)
-        self.second_modifier_label = tk.Label(self.dropdown_frame, text="Second Modifier:", bg="gray20", fg="white")
         self.second_modifier_var = tk.StringVar(value="None")
         self.modifier_dropdown_2 = ttk.Combobox(
-            self.dropdown_frame, textvariable=self.second_modifier_var, state="readonly",
+            self.dropdown_frame, 
+            textvariable=self.second_modifier_var, 
+            state="readonly",
+            style="TCombobox",
             values=["None", "Ctrl", "Alt", "Shift", "windows"]
         )
 
         # Third dropdown (all keys)
-        self.third_key_label = tk.Label(self.dropdown_frame, text="Key:", bg="gray20", fg="white")
+        self.third_key_label = tk.Label(
+            self.dropdown_frame, 
+            text="Key:", 
+            bg=COLORS["bg_medium"], 
+            fg=COLORS["accent"],
+            font=("Segoe UI", 11)
+        )
         self.third_key_var = tk.StringVar()
         all_keys = (
             [chr(i) for i in range(65, 91)] +  # A-Z
@@ -78,16 +115,33 @@ class AdvancedConfigTab:
             ["windows"]  # Add more keys as needed
         )
         self.third_dropdown = ttk.Combobox(
-            self.dropdown_frame, textvariable=self.third_key_var, state="readonly",
+            self.dropdown_frame,
+            textvariable=self.third_key_var,
+            state="readonly",
+            style="TCombobox",
             values=all_keys
         )
 
         self.modifier_dropdown_1.bind("<<ComboboxSelected>>", self.sync_modifiers)
-        self.modifier_dropdown_2.bind("<<ComboboxSelected>>", self.sync_modifiers)
-
-        # Initialize dropdowns based on default radio selection
-        self.update_key_dropdowns()        # Save Button
-        self.save_button = create_save_button(self.tab_frame, self.controller.save_config)
+        self.modifier_dropdown_2.bind("<<ComboboxSelected>>", self.sync_modifiers)        # Initialize dropdowns based on default radio selection
+        self.update_key_dropdowns()
+          # Add a spacer frame to push content up and save button down
+        spacer = tk.Frame(self.tab_frame, bg=COLORS["bg_medium"])
+        spacer.pack(fill="both", expand=True)
+        
+        # Add a separator line before save button for visual clarity
+        separator = tk.Frame(self.tab_frame, height=1, bg=COLORS["bg_light"])
+        separator.pack(fill="x", padx=10, pady=8, side="bottom")
+            # Save Button - placed in its own frame at the bottom for consistency
+        save_button_frame = tk.Frame(self.tab_frame, bg=COLORS["bg_medium"])
+        save_button_frame.pack(side="bottom", pady=5, fill="x")
+        
+        # Save Button with modern styling - centered
+        button_container = create_save_button(save_button_frame, self.controller.save_config)
+        button_container.pack(side="top", pady=5, padx=0, anchor="center")
+        
+        # Access the button through the container's button attribute
+        self.save_button = button_container.button
         
         # Register save button with controller
         if hasattr(self.controller, 'register_save_button'):
